@@ -105,7 +105,7 @@ class OrderServiceApplicationTests {
 		given(bookClient.getBookByIsbn(bookIsbn)).willReturn(Mono.just(book));
 		OrderRequest orderRequest = new OrderRequest(bookIsbn, 1);
 
-		Order expectedOrder = webTestClient.post().uri("/orders")
+		Order expectedOrder = webTestClient.post().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.bodyValue(orderRequest)
 				.exchange()
@@ -115,7 +115,7 @@ class OrderServiceApplicationTests {
 		Assertions.assertThat(objectMapper.readValue(output.receive().getPayload(), OrderAcceptedMessage.class))
 				.isEqualTo(new OrderAcceptedMessage(expectedOrder.id()));
 
-		webTestClient.get().uri("/orders")
+		webTestClient.get().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.exchange()
 				.expectStatus().is2xxSuccessful()
@@ -134,7 +134,7 @@ class OrderServiceApplicationTests {
 		given(bookClient.getBookByIsbn(bookIsbn)).willReturn(Mono.just(book));
 		OrderRequest orderRequest = new OrderRequest(bookIsbn, 1);
 
-		Order orderByBjorn = webTestClient.post().uri("/orders")
+		Order orderByBjorn = webTestClient.post().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.bodyValue(orderRequest)
 				.exchange()
@@ -144,7 +144,7 @@ class OrderServiceApplicationTests {
 		assertThat(objectMapper.readValue(output.receive().getPayload(), OrderAcceptedMessage.class))
 				.isEqualTo(new OrderAcceptedMessage(orderByBjorn.id()));
 
-		Order orderByIsabelle = webTestClient.post().uri("/orders")
+		Order orderByIsabelle = webTestClient.post().uri("/")
 				.headers(headers -> headers.setBearerAuth(isabelleTokens.accessToken()))
 				.bodyValue(orderRequest)
 				.exchange()
@@ -154,7 +154,7 @@ class OrderServiceApplicationTests {
 		assertThat(objectMapper.readValue(output.receive().getPayload(), OrderAcceptedMessage.class))
 				.isEqualTo(new OrderAcceptedMessage(orderByIsabelle.id()));
 
-		webTestClient.get().uri("/orders")
+		webTestClient.get().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.exchange()
 				.expectStatus().is2xxSuccessful()
@@ -175,7 +175,7 @@ class OrderServiceApplicationTests {
 		given(bookClient.getBookByIsbn(bookIsbn)).willReturn(Mono.just(book));
 		OrderRequest orderRequest = new OrderRequest(bookIsbn, 3);
 
-		Order createdOrder = webTestClient.post().uri("/orders")
+		Order createdOrder = webTestClient.post().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.bodyValue(orderRequest)
 				.exchange()
@@ -200,7 +200,7 @@ class OrderServiceApplicationTests {
 		given(bookClient.getBookByIsbn(bookIsbn)).willReturn(Mono.empty());
 		OrderRequest orderRequest = new OrderRequest(bookIsbn, 3);
 
-		webTestClient.post().uri("/orders")
+		webTestClient.post().uri("/")
 				.headers(headers -> headers.setBearerAuth(bjornTokens.accessToken()))
 				.bodyValue(orderRequest)
 				.exchange()
@@ -217,7 +217,7 @@ class OrderServiceApplicationTests {
 		return webClient
 				.post()
 				.body(BodyInserters.fromFormData("grant_type", "password")
-						.with("client_id", "polar-test")
+						.with("client_id", "book-app")
 						.with("username", username)
 						.with("password", password)
 				)

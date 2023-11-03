@@ -90,7 +90,7 @@
       "attributes" : { }
     } ],
     "client" : {
-      "polar-test" : [ ],
+      "book-app" : [ ],
       "realm-management" : [ {
         "id" : "40e89ab3-1dd1-46ed-83e4-001b1bbabda9",
         "name" : "manage-events",
@@ -417,7 +417,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "customer", "default-roles-book-realm", "employee" ],
+    "realmRoles" : [ "customer", "default-roles-book-realm", "employee", "BOOK_MANAGER" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],
@@ -577,7 +577,7 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "e6386b02-4478-4aab-a8ab-e0898982e782",
-    "clientId" : "polar-test",
+    "clientId" : "book-app",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
