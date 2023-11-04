@@ -26,7 +26,7 @@ public class WebSecurityConfig {
 
                         .pathMatchers(HttpMethod.GET,"/", "/**").permitAll()
 
-                        .pathMatchers("/", "/**").hasRole(BOOK_MANAGER)
+                        .pathMatchers("/", "/**").hasRole(BOOK_USER)
 
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(

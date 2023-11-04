@@ -396,7 +396,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "customer", "default-roles-book-realm", "BOOK_MANAGER" ],
+    "realmRoles" : [ "customer", "default-roles-book-realm", "BOOK_USER" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -417,7 +417,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "customer", "default-roles-book-realm", "employee", "BOOK_MANAGER" ],
+    "realmRoles" : [ "customer", "default-roles-book-realm", "employee", "BOOK_USER" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],

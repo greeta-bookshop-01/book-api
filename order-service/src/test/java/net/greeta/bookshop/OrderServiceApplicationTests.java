@@ -53,7 +53,7 @@ class OrderServiceApplicationTests {
 	private static KeycloakToken isabelleTokens;
 
 	@Container
-	private static final KeycloakContainer keycloakContainer = new KeycloakContainer("quay.io/keycloak/keycloak:19.0")
+	private static final KeycloakContainer keycloakContainer = new KeycloakContainer("quay.io/keycloak/keycloak:22.0.1")
 			.withRealmImportFile("test-realm-config.json");
 
 	@Container

@@ -57,6 +57,10 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: spa-route
+          uri: ${SPA_URL:http://localhost:9004}
+          predicates:
+            - Path=/,/*.css,/*.js,/favicon.ico
         - id: catalog
           uri: http://localhost:9081
           predicates:
