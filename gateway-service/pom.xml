@@ -10,7 +10,8 @@
 
     <properties>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
-        <keycloak.version>21.1.1</keycloak.version>
+        <keycloak.version>22.0.1</keycloak.version>
+        <testkeycloak.version>2.3.0</testkeycloak.version>
     </properties>
 
     <dependencies>
@@ -97,6 +98,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.dasniko</groupId>
+            <artifactId>testcontainers-keycloak</artifactId>
+            <version>${testkeycloak.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

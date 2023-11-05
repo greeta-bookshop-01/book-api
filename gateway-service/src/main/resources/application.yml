@@ -62,7 +62,7 @@ spring:
           predicates:
             - Path=/,/*.css,/*.js,/favicon.ico
         - id: catalog
-          uri: http://localhost:9081
+          uri: ${CATALOG_SERVICE_URL:http://localhost:9001}
           predicates:
             - Path=/catalog/**
           filters:
@@ -72,7 +72,7 @@ spring:
                 name: catalogCircuitBreaker
                 fallbackUri: forward:/catalog-fallback
         - id: order
-          uri: http://localhost:9082
+          uri: ${ORDER_SERVICE_URL:http://localhost:9002}
           predicates:
             - Path=/order/**
           filters:

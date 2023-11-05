@@ -1,4 +1,4 @@
-package net.greeta.bookshop.catalog.config;
+package net.greeta.bookshop.catalog.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +10,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 public class JwtAuthConverterConfig {
 
     @Bean
-    @Profile("integration")
-    @Primary
     public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
         var jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-
         return jwtGrantedAuthoritiesConverter;
     }
 }

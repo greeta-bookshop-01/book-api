@@ -5,216 +5,149 @@ services:
 
   catalog:
     depends_on:
-      - fluent-bit
-      - polar-keycloak
-      - polar-postgres
-      - tempo
-    image: "catalog"
+      - book-keycloak
+      - book-postgres
+    image: "catalog-service"
     container_name: "catalog"
     ports:
       - 9001:9001
       - 8001:8001
     environment:
+      - SERVER_PORT=9001
       - BPL_JVM_THREAD_COUNT=50
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8001
-      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.17.0.jar
-      - OTEL_SERVICE_NAME=catalog
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
-      - OTEL_METRICS_EXPORTER=none
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://polar-postgres:5432/polardb_catalog
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://book-postgres:5432/polardb_catalog
+      - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
   order:
     depends_on:
-      - fluent-bit
-      - polar-keycloak
-      - polar-postgres
-      - polar-rabbitmq
-    image: "order"
+      - book-keycloak
+      - book-postgres
+      - book-rabbitmq
+    image: "order-service"
     container_name: "order"
     ports:
       - 9002:9002
       - 8002:8002
     environment:
+      - SERVER_PORT=9002
       # Buildpacks environment variable to enable debug through a socket on port 8002
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8002
-      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.17.0.jar
-      - OTEL_SERVICE_NAME=order
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
-      - OTEL_METRICS_EXPORTER=none
       - POLAR_CATALOG_SERVICE_URI=http://catalog:9001
-      - SPRING_R2DBC_URL=r2dbc:postgresql://polar-postgres:5432/polardb_order
-      - SPRING_FLYWAY_URL=jdbc:postgresql://polar-postgres:5432/polardb_order
-      - SPRING_RABBITMQ_HOST=polar-rabbitmq
+      - SPRING_R2DBC_URL=r2dbc:postgresql://book-postgres:5432/polardb_order
+      - SPRING_FLYWAY_URL=jdbc:postgresql://book-postgres:5432/polardb_order
+      - SPRING_RABBITMQ_HOST=book-rabbitmq
+      - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
   dispatcher:
     depends_on:
-      - fluent-bit
-      - polar-rabbitmq
-    image: "dispatcher"
+      - book-rabbitmq
+    image: "dispatcher-service"
     container_name: "dispatcher"
     ports:
       - 9003:9003
       - 8003:8003
     environment:
+      - SERVER_PORT=9003
       # Buildpacks environment variable to enable debug through a socket on port 8002
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8003
-      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.17.0.jar
-      - OTEL_SERVICE_NAME=dispatcher
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
-      - OTEL_METRICS_EXPORTER=none
-      - SPRING_RABBITMQ_HOST=polar-rabbitmq
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
+      - SPRING_RABBITMQ_HOST=book-rabbitmq
   
   gateway:
     depends_on:
-      - fluent-bit
-      - polar-keycloak
-      - polar-redis
-      - polar-ui
-    image: "gateway"
+      - book-keycloak
+      - book-redis
+      - book-ui
+    image: "gateway-service"
     container_name: "gateway"
     ports:
       - 9000:9000
       - 8000:8000
     environment:
+      - SERVER_PORT=9000
       # Buildpacks environment variable to enable debug through a socket on port 8000
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8000
-      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.17.0.jar
-      - OTEL_SERVICE_NAME=edge-service
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
-      - OTEL_METRICS_EXPORTER=none
-      - CATALOG_SERVICE_URL=http://catalog:9001
-      - ORDER_SERVICE_URL=http://order:9002
-      - SPA_URL=http://polar-ui:9004
-      - SPRING_REDIS_HOST=polar-redis
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
+      - CATALOG_SERVICE_URL=http://localhost:9001
+      - ORDER_SERVICE_URL=http://localhost:9002
+      - SPA_URL=http://localhost:9004
+      - SPRING_REDIS_HOST=book-redis
+      - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
-  polar-ui:
-    depends_on:
-      - fluent-bit
-    image: "ghcr.io/polarbookshop/polar-ui:v1"
-    container_name: "polar-ui"
+  book-ui:
+    image: "book-ui"
+    container_name: "book-ui"
     ports:
       - 9004:9004
     environment:
       - PORT=9004
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
   
   # Backing Services
 
-  polar-postgres:
+  book-postgres:
     image: "postgres:14.4"
-    container_name: "polar-postgres"
+    container_name: "book-postgres"
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     volumes:
-      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker-conf/postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  polar-redis:
+  book-redis:
     image: "redis:7.0"
-    container_name: "polar-redis"
+    container_name: "book-redis"
     ports:
       - 6379:6379
 
-  polar-rabbitmq:
+  book-rabbitmq:
     image: rabbitmq:3.10-management
-    container_name: polar-rabbitmq
+    container_name: book-rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
-      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./docker-conf/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+
+  keycloak-postgres:
+    image: postgres:15.3
+    container_name: keycloak_postgres
+    ports:
+      - "5433:5433"
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: "pg_isready -U postgres"
   
-  polar-keycloak:
-    image: quay.io/keycloak/keycloak:19.0
-    container_name: "polar-keycloak"
-    command: start-dev --import-realm
-    volumes:
-      - ./keycloak:/opt/keycloak/data/import
+  book-keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: book-keycloak
     environment:
-      - KEYCLOAK_ADMIN=user
-      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=keycloak-postgres
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=password
+      - KC_DB_PORT=5433
+      - KC_HEALTH_ENABLED=true
     ports:
-      - 8080:8080
-
-  # Observability
-
-  grafana:
-    image: grafana/grafana:9.1.2
-    container_name: grafana
+      - "8080:8080"
+    command: start-dev
     depends_on:
-      - loki
-      - prometheus
-      - tempo
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=user
-      - GF_SECURITY_ADMIN_PASSWORD=password
-    volumes:
-      - ./observability/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
-      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./observability/grafana/grafana.ini:/etc/grafana/grafana.ini
-
-  loki:
-    image: grafana/loki:2.6.1
-    container_name: loki
-    depends_on:
-      - fluent-bit
-    ports:
-      - "3100:3100"
-
-  fluent-bit:
-    image: grafana/fluent-bit-plugin-loki:2.6.1-amd64
-    container_name: fluent-bit
-    ports:
-      - "24224:24224"
-    environment:
-      - LOKI_URL=http://loki:3100/loki/api/v1/push
-    volumes:
-      - ./observability/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-
-  prometheus:
-    image: prom/prometheus:v2.38.0
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-
-  tempo:
-    image: grafana/tempo:1.5.0
-    container_name: tempo
-    command: -config.file /etc/tempo-config.yml
-    ports:
-      - "3110:3100"     # Tempo
-      - "4317:4317"     # OTel
-    volumes:
-      - ./observability/tempo/tempo.yml:/etc/tempo-config.yml
+      - keycloak-postgres
+    healthcheck:
+      test: "curl -f http://book-keycloak:8080/health/ready || exit 1"
