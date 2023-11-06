@@ -1,8 +1,11 @@
 package net.greeta.bookshop.order.web;
 
+import lombok.RequiredArgsConstructor;
+import net.greeta.bookshop.helper.JwtHelper;
 import net.greeta.bookshop.order.domain.OrderService;
 import net.greeta.bookshop.order.domain.Order;
 import jakarta.validation.Valid;
+import net.greeta.bookshop.security.JwtAuthConverterProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +21,18 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 
 @RestController
+@RequiredArgsConstructor
 public class OrderController {
 
 	private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 	private final OrderService orderService;
 
-	public OrderController(OrderService orderService) {
-		this.orderService = orderService;
-	}
+	private final JwtAuthConverterProperties jwtAuthConverterProperties;
 
 	@GetMapping
 	public Flux<Order> getAllOrders(@AuthenticationPrincipal Jwt jwt) {
 		log.info("Fetching all orders");
-		return jwt == null ? Flux.empty() : orderService.getAllOrders(jwt.getSubject());
+		return jwt == null ? Flux.empty() : orderService.getAllOrders(JwtHelper.getUsername(jwt, jwtAuthConverterProperties));
 	}
 
 	@PostMapping

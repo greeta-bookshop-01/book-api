@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @Component
 public class BookClient {
 
-	private static final String BOOKS_ROOT_API = "/books/";
+	private static final String BOOKS_ROOT_API = "/";
 	private final WebClient webClient;
 
 	public BookClient(WebClient webClient) {
