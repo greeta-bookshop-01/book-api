@@ -1,5 +1,6 @@
 server:
   shutdown: graceful
+  forward-headers-strategy: framework
   netty:
     connection-timeout: 2s
     idle-timeout: 15s

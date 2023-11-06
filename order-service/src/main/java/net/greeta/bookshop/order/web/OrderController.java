@@ -3,6 +3,7 @@ package net.greeta.bookshop.order.web;
 import net.greeta.bookshop.order.domain.OrderService;
 import net.greeta.bookshop.order.domain.Order;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Collections;
 
 @RestController
 public class OrderController {
@@ -27,7 +30,7 @@ public class OrderController {
 	@GetMapping
 	public Flux<Order> getAllOrders(@AuthenticationPrincipal Jwt jwt) {
 		log.info("Fetching all orders");
-		return orderService.getAllOrders(jwt.getSubject());
+		return jwt == null ? Flux.empty() : orderService.getAllOrders(jwt.getSubject());
 	}
 
 	@PostMapping

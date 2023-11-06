@@ -19,7 +19,7 @@ services:
       - BPL_DEBUG_PORT=8001
       - SPRING_DATASOURCE_URL=jdbc:postgresql://book-postgres:5432/polardb_catalog
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
   order:
@@ -42,7 +42,7 @@ services:
       - SPRING_FLYWAY_URL=jdbc:postgresql://book-postgres:5432/polardb_order
       - SPRING_RABBITMQ_HOST=book-rabbitmq
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
   dispatcher:
@@ -75,12 +75,12 @@ services:
       # Buildpacks environment variable to enable debug through a socket on port 8000
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8000
-      - CATALOG_SERVICE_URL=http://localhost:9001
-      - ORDER_SERVICE_URL=http://localhost:9002
+      - CATALOG_SERVICE_URL=http://catalog:9001
+      - ORDER_SERVICE_URL=http://order:9002
       - SPA_URL=http://localhost:9004
       - SPRING_REDIS_HOST=book-redis
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/book-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
 
   book-ui:

@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 public class JwtAuthConverterConfig {
 
     @Bean
+    @Profile("!integration")
     public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
         var jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         return jwtGrantedAuthoritiesConverter;

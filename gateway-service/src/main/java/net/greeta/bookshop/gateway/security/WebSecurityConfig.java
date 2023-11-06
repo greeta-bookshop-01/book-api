@@ -35,6 +35,8 @@ public class WebSecurityConfig {
 
                         .anyExchange().authenticated()
                         .and()
+                        //.exceptionHandling(exceptionHandling -> exceptionHandling
+                        //        .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
                         .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                         .oauth2ResourceServer().jwt()
                         .jwtAuthenticationConverter(new ReactiveJwtAuthenticationConverterAdapter(jwtAuthConverter))
