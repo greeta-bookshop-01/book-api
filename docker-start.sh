@@ -1,11 +1,5 @@
 docker-compose down
 
-cd ../book-ui
-./gradlew buildAngular
-pack build book-ui --buildpack gcr.io/paketo-buildpacks/nginx --builder paketobuildpacks/builder:base -p dist
-
-cd ../book-api
-
 mvn clean install
 
 cd catalog-service

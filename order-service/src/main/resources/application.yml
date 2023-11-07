@@ -47,6 +47,7 @@ spring:
     connection-timeout: 5s
   keycloak:
     server-url: http://localhost:8080
+    server-external-url: http://localhost:8080
   security:
     oauth2:
       resourceserver:
@@ -96,7 +97,7 @@ management:
 
 openapi:
   oauthflow:
-    authServerUrl: http://localhost:8080
+    authServerUrl: ${spring.keycloak.server-external-url}
     realm: book-realm
 
 polar:
