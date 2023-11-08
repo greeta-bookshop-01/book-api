@@ -52,8 +52,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${spring.keycloak.server-url}/realms/book-realm
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+          issuer-uri: ${spring.keycloak.server-external-url}/realms/book-realm
+          jwk-set-uri: ${spring.keycloak.server-url}/realms/book-realm/protocol/openid-connect/certs
 
 logging:
   pattern:

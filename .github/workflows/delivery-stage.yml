@@ -7,7 +7,7 @@ on:
 concurrency: acceptance
 
 env:
-  OWNER: greeta-book-01
+  OWNER: greeta-bookshop-01
   REGISTRY: ghcr.io
   APP_REPO: book-api
   DEPLOY_REPO: book-infra

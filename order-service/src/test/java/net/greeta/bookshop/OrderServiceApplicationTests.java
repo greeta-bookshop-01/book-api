@@ -80,6 +80,8 @@ class OrderServiceApplicationTests {
 
 		registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
 				() -> keycloakContainer.getAuthServerUrl() + "realms/book-realm");
+		registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+				() -> keycloakContainer.getAuthServerUrl() + "realms/book-realm/protocol/openid-connect/certs");
 	}
 
 	private static String r2dbcUrl() {

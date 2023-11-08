@@ -19,8 +19,7 @@ services:
       - BPL_DEBUG_PORT=8001
       - SPRING_DATASOURCE_URL=jdbc:postgresql://book-postgres:5432/polardb_catalog
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
+      - SPRING_KEYCLOAK_SERVER_EXTERNAL_URL=http://localhost:8080
 
   order:
     depends_on:
@@ -42,8 +41,7 @@ services:
       - SPRING_FLYWAY_URL=jdbc:postgresql://book-postgres:5432/polardb_order
       - SPRING_RABBITMQ_HOST=book-rabbitmq
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
+      - SPRING_KEYCLOAK_SERVER_EXTERNAL_URL=http://localhost:8080
 
   dispatcher:
     depends_on:
@@ -77,19 +75,9 @@ services:
       - BPL_DEBUG_PORT=8000
       - CATALOG_SERVICE_URL=http://catalog:9001
       - ORDER_SERVICE_URL=http://order:9002
-      - SPA_URL=http://localhost:9004
       - SPRING_REDIS_HOST=book-redis
       - SPRING_KEYCLOAK_SERVER_URL=http://book-keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/realms/book-realm
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://book-keycloak:8080/realms/book-realm/protocol/openid-connect/certs
-
-  book-ui:
-    image: "book-ui"
-    container_name: "book-ui"
-    ports:
-      - 9004:9004
-    environment:
-      - PORT=9004
+      - SPRING_KEYCLOAK_SERVER_EXTERNAL_URL=http://localhost:8080
   
   # Backing Services
 

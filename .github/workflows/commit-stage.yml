@@ -3,7 +3,7 @@ on: push
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: greeta-book-01
+  IMAGE_OWNER: greeta-bookshop-01
   VERSION: ${{ github.sha }}
 
 jobs:
@@ -26,16 +26,20 @@ jobs:
           cache: maven
       - name: Build
         run: |
-          mvn clean install -DskipTests
+          mvn clean install
       - name: Build container images
         run: |
-          cd book-service
+          cd catalog-service
           mvn spring-boot:build-image -DskipTests \
-            -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/book-service:${{ env.VERSION }}
+            -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/catalog-service:${{ env.VERSION }}
           cd ../
-          cd erp-service
+          cd order-service
           mvn spring-boot:build-image -DskipTests \
-            -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/erp-service:${{ env.VERSION }}
+            -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/order-service:${{ env.VERSION }}
+          cd ../
+          cd dispatcher-service
+          mvn spring-boot:build-image -DskipTests \
+            -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/dispatcher-service:${{ env.VERSION }}
           cd ../
           cd gateway-service
           mvn spring-boot:build-image -DskipTests \
@@ -49,18 +53,23 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish container image
         run:  |
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/book-service:${{ env.VERSION }}
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/erp-service:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/catalog-service:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/order-service:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/dispatcher-service:${{ env.VERSION }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/gateway-service:${{ env.VERSION }}
       - name: Publish container image (latest)
         run: |
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/book-service:${{ env.VERSION }} \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/book-service:latest
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/book-service:latest
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/catalog-service:${{ env.VERSION }} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/catalog-service:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/catalog-service:latest
           
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/erp-service:${{ env.VERSION }} \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/erp-service:latest
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/erp-service:latest
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/order-service:${{ env.VERSION }} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/order-service:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/order-service:latest
+          
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/dispatcher-service:${{ env.VERSION }} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/dispatcher-service:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/dispatcher-service:latest
                     
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/gateway-service:${{ env.VERSION }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/gateway-service:latest

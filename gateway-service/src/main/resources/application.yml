@@ -86,16 +86,17 @@ spring:
     store-type: redis
     timeout: 10m
     redis:
-      namespace: polar:edge
+      namespace: polar:gateway
 
   keycloak:
-      server-url: http://localhost:8080
+    server-url: http://localhost:8080
+    server-external-url: http://localhost:8080
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${spring.keycloak.server-url}/realms/book-realm
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+          issuer-uri: ${spring.keycloak.server-external-url}/realms/book-realm
+          jwk-set-uri: ${spring.keycloak.server-url}/realms/book-realm/protocol/openid-connect/certs
 
 jwt:
   auth:
