@@ -19,7 +19,7 @@ sh docker-start.sh
 
 - load the orders and make sure that your created order has status `DISPATCHED` (it means that dispatcher service has received the message and changed the status of the order)
 
-- See this README file for AWS Infrastructure Setup: **https://github.com/greeta-book-01/book-infra**
+- See this README file for AWS Infrastructure Setup: **https://github.com/greeta-bookshop-01/book-infra**
 
 
 ### Remote Debugging
