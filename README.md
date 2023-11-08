@@ -29,5 +29,5 @@ sh docker-start.sh
 - if you want to debug your AWS kubernetes services remotely, use port forwarding:
 
 ```
-kubectl port-forward 8002:8002
+kubectl port-forward svc/order 8002:8002
 ```
