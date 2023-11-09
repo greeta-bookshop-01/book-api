@@ -62,7 +62,6 @@ services:
     depends_on:
       - book-keycloak
       - book-redis
-      - book-ui
     image: "gateway-service"
     container_name: "gateway"
     ports:
